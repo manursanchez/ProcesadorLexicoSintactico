@@ -1,0 +1,335 @@
+//===========================================//
+
+//  PRÁCTICA PROCESADORES DEL LENGUAJE I   
+//	Alumno: Manuel Rodríguez Sánchez       
+//  Email: mrodrigue212@alumno.uned.es     
+
+//===========================================//
+package compiler.syntax;
+
+// Declaración de importaciones 
+//(No modificar las proporcionadas. Se pueden agregar mas)
+
+import java_cup.runtime.Symbol;
+import java.util.*;
+
+import es.uned.lsi.compiler.lexical.*;
+import es.uned.lsi.compiler.code.*;
+import es.uned.lsi.compiler.intermediate.*;
+import es.uned.lsi.compiler.semantic.*;
+import es.uned.lsi.compiler.semantic.symbol.*;
+import es.uned.lsi.compiler.semantic.type.*;
+import es.uned.lsi.compiler.syntax.*;
+
+import compiler.CompilerContext;
+import compiler.lexical.*;
+import compiler.syntax.nonTerminal.*;
+import compiler.semantic.*;
+import compiler.semantic.symbol.*;
+import compiler.semantic.type.*;
+import compiler.intermediate.*;
+import compiler.code.*;
+
+// Declaración del código de usuario. NO MODIFICAR, pero sí se puede ampliar
+
+action code {:
+	
+	SyntaxErrorManager   syntaxErrorManager   = CompilerContext.getSyntaxErrorManager();
+	SemanticErrorManager semanticErrorManager = CompilerContext.getSemanticErrorManager ();
+	ScopeManagerIF       scopeManager         = CompilerContext.getScopeManager ();
+	FinalCodeFactoryIF   finalCodeFactory     = CompilerContext.getFinalCodeFactory ();
+
+:}	
+
+parser code {:
+	SyntaxErrorManager syntaxErrorManager = CompilerContext.getSyntaxErrorManager();
+	
+	public void syntax_error(Symbol symbol)
+	{ 
+	    Token token = (Token) symbol.value;
+	    syntaxErrorManager.syntaxError ("Error sintactico", token);	    
+	}
+		
+	public void unrecovered_syntax_error(java_cup.runtime.Symbol symbol)
+	{	
+	    Token token = (Token) symbol.value;
+	    syntaxErrorManager.syntaxFatalError ("Error fatal", token);
+	}
+:}
+// FIN declaración del código de usuario
+
+// Declaración de terminales (Ejemplo)
+
+terminal Token PLUS;
+
+terminal Token MINUS;
+terminal Token PRODUCTO;
+terminal Token PUNTOCOMA;
+terminal Token ARRAY;
+terminal Token BEGIN;
+terminal Token BOOLEAN;
+terminal Token CONST;
+terminal Token DO;
+terminal Token ELSE;
+terminal Token END;
+terminal Token FALSE;
+terminal Token FOR;
+terminal Token IF;
+terminal Token INTEGER;
+terminal Token MODULE;
+terminal Token NOT;
+terminal Token OF;
+terminal Token OR;
+terminal Token PROCEDURE;
+terminal Token RETURN;
+terminal Token THEN;				
+terminal Token TO;				
+terminal Token TRUE;				
+terminal Token TYPE;				
+terminal Token VAR;				
+terminal Token WHILE;				
+terminal Token WRITESTRING;		
+terminal Token WRITEINT;			
+terminal Token WRITELN;	
+terminal Token MAYORQUE;
+terminal Token IGUAL;
+terminal Token ASIGNACION;
+terminal Token PUNTO;
+terminal Token CORCHETEABIERTO;
+terminal Token CORCHETECERRADO;
+terminal Token PARENTESISABIERTO;
+terminal Token PARENTESISCERRADO;
+terminal Token COMA;
+terminal Token DOSPUNTOS;
+terminal Token IDENTIFICADOR;
+terminal Token ENTERO_TAL_CUAL;
+terminal Token CADENA;
+// ...
+
+
+// Declaración de no terminales
+// no modificar los propuestos
+
+non terminal  			program;
+non terminal Axiom		axiom;
+
+// Mis no terminales
+non terminal			modulUNED;
+non terminal 			modulo;
+non terminal 			inicio;
+
+non terminal 			declaraciones;
+non terminal 			declaraciones2;
+non terminal 			declaraciones3;
+non terminal 			declaraciones4;
+non terminal 			declaracionConstantes;
+non terminal 			declaracionConstante;
+non terminal 			tipoConstante;
+
+non terminal			declaracionVectores; 		
+non terminal			vector; 						
+non terminal			indicesVector;				
+non terminal			tipoIndice;				
+non terminal			tipoDeVector;				
+
+non terminal			declaracionVariables;	
+non terminal			declaracionVariable;	 
+non terminal			listaVariables;								
+non terminal			tiposVariable; 		
+
+non terminal			declaracionSubprogramas;
+non terminal			declaracionSubprograma;
+non terminal			funcion;
+non terminal			procedimiento;
+non terminal			cabeceraFuncion;
+non terminal			tipoDatoDevuelto;
+non terminal			listaParametros;
+non terminal			conjuntoParametros;
+non terminal			parametro;
+non terminal			declaracionesFuncion;
+non terminal			cuerpoFuncion;
+non terminal			instruccionesFuncion;
+non terminal			instruccionReturn;
+non terminal			envioParametros;
+non terminal			llamadaFuncion;
+non terminal			declaracionParametros;
+//non terminal			declaracionParametro;
+non terminal			llamadaProcedimiento;
+non terminal			cabeceraProcedimiento;
+non terminal			declaracionesProcedimiento;
+non terminal			cuerpoProcedimiento;
+non terminal			instruccionesProcedimiento;
+non terminal			vacio;
+non terminal 			instrucciones;
+non terminal			instruccion;
+non terminal			instruccionWriteString;
+non terminal			instruccionWriteln;
+non terminal			instruccionWriteInt;
+non terminal			instruccionAsignacion;
+non terminal			instruccionCondicional;
+non terminal			else;
+non terminal			instruccionIterativa;
+non terminal			expresion;
+non terminal 			fin;
+
+// ...
+
+
+// Declaración de relaciones de precedencia
+precedence left		PUNTO, PARENTESISABIERTO, PARENTESISCERRADO, CORCHETEABIERTO, CORCHETECERRADO;
+precedence left		PRODUCTO;
+precedence left		PLUS, MINUS;
+
+precedence right	NOT;
+precedence left		OR, MAYORQUE, IGUAL;
+// ...
+
+// Declaración de reglas de producción
+
+
+start with program;
+
+program ::= 
+  {: 
+        syntaxErrorManager.syntaxInfo ("Starting parsing..."); 
+   :}
+  axiom:ax
+  {: 
+  		// No modificar esta estructura, aunque se pueden añadir más acciones semánticas
+  		// Para la entrega de febrero pueden comentarse las dos sentencias siguientes:
+  		//List intermediateCode = ax.getIntermediateCode ();
+  		//finalCodeFactory.create (intermediateCode);
+  		// En caso de no comentarse las sentencias anteriores puede generar una excepcion
+  		// en las llamadas a cupTest en la entrega de Febrero. Esto es debido a que 
+  		// aún no se tendrá implementada la generación de código intermedio ni final.
+  		// Para la entrega de Junio deberán descomentarse y usarse.
+  		
+  		syntaxErrorManager.syntaxInfo ("Parsing process ended.");
+   :};
+
+///////////////////////////////// INICIO ////////////////////////////////
+
+axiom ::= modulUNED;
+
+//Gramática y reglas de producción
+
+modulUNED				::=		modulo declaraciones inicio fin;
+
+modulo 					::= 	MODULE IDENTIFICADOR PUNTOCOMA;
+declaraciones			::=		declaracionConstantes declaraciones2 | declaraciones2;
+declaraciones2			::=		declaracionVectores declaraciones3 | declaraciones3;
+declaraciones3			::=		declaracionVariables declaraciones4 | declaraciones4;
+declaraciones4			::=		declaracionSubprogramas | vacio;
+vacio					::=		 ;
+inicio 					::= 	BEGIN instrucciones | BEGIN;
+fin 					::= 	END IDENTIFICADOR PUNTOCOMA;
+
+/////////////////////////////// DECLARACIONES /////////////////////////////////////////////////
+
+////////////// Declaración Constantes /////////////////////////////////////////////////////// 
+
+declaracionConstantes 	::= declaracionConstantes declaracionConstante | declaracionConstante;
+declaracionConstante 	::= CONST IDENTIFICADOR IGUAL tipoConstante PUNTOCOMA | IDENTIFICADOR IGUAL tipoConstante PUNTOCOMA;
+tipoConstante 			::= TRUE | FALSE | ENTERO_TAL_CUAL;
+
+////////////// Declaración de vectores //////////////////////////////////////////////////////
+
+declaracionVectores 		::= declaracionVectores vector | vector;
+vector 						::= TYPE IDENTIFICADOR IGUAL ARRAY CORCHETEABIERTO indicesVector CORCHETECERRADO OF tipoDeVector PUNTOCOMA;
+indicesVector				::= tipoIndice PUNTO PUNTO tipoIndice;
+tipoIndice	 				::= ENTERO_TAL_CUAL | IDENTIFICADOR;
+tipoDeVector				::= INTEGER | BOOLEAN;
+
+////////////// Declaración de variables /////////////////////////////////////////////////////
+
+declaracionVariables	::= declaracionVariables declaracionVariable | declaracionVariable;
+declaracionVariable		::= VAR IDENTIFICADOR DOSPUNTOS tiposVariable PUNTOCOMA | IDENTIFICADOR DOSPUNTOS tiposVariable PUNTOCOMA |
+							listaVariables COMA IDENTIFICADOR DOSPUNTOS tiposVariable PUNTOCOMA | IDENTIFICADOR DOSPUNTOS tiposVariable;
+listaVariables			::= listaVariables COMA IDENTIFICADOR | IDENTIFICADOR;					
+tiposVariable 			::= INTEGER | BOOLEAN | IDENTIFICADOR;
+
+////////////// Declaración de funciones y procedimientos////////////////////////////////////
+
+declaracionSubprogramas	::=	declaracionSubprogramas declaracionSubprograma | declaracionSubprograma;
+declaracionSubprograma	::=	funcion | procedimiento;
+
+
+//////////// FUNCION /////////////////////////////////////////////////////////////
+
+funcion					::=	cabeceraFuncion declaracionesFuncion cuerpoFuncion;
+
+cabeceraFuncion			::= PROCEDURE IDENTIFICADOR PARENTESISABIERTO listaParametros PARENTESISCERRADO DOSPUNTOS tipoDatoDevuelto PUNTOCOMA;
+tipoDatoDevuelto		::= INTEGER | BOOLEAN;
+
+//// Parámetros de la cabecera para función y procedimientos ///////////////
+
+listaParametros			::= listaParametros PUNTOCOMA conjuntoParametros | conjuntoParametros | vacio;
+conjuntoParametros		::= declaracionParametros DOSPUNTOS tiposVariable;
+declaracionParametros	::= declaracionParametros COMA parametro | parametro;
+parametro				::= IDENTIFICADOR;
+
+
+// Decalaraciones pertenecientes a la función //
+
+declaracionesFuncion	::= declaraciones; 
+
+// Cuerpo de la función //
+
+cuerpoFuncion			::= BEGIN instruccionesFuncion END IDENTIFICADOR PUNTOCOMA;
+instruccionesFuncion	::= instrucciones instruccionReturn | instruccionReturn;
+instruccionReturn		::= RETURN expresion PUNTOCOMA;
+
+/////////// FIN DE FUNCION //////////////////////////////////////////////////////
+
+////////// PROCEDIMIENTO ///////////////////////////////////////////////////////
+
+procedimiento					::=	cabeceraProcedimiento declaracionesProcedimiento cuerpoProcedimiento;
+cabeceraProcedimiento			::= PROCEDURE IDENTIFICADOR PARENTESISABIERTO listaParametros PARENTESISCERRADO PUNTOCOMA;
+declaracionesProcedimiento 		::= declaraciones;
+cuerpoProcedimiento				::= BEGIN instruccionesProcedimiento END IDENTIFICADOR PUNTOCOMA;
+instruccionesProcedimiento 		::= instrucciones;
+
+////////// FIN DE PROCEDIMIENTO /////////////////////////////////////////////////
+
+//////// Instrucción condicional IF ///////////////////////////////////////////////////
+
+instruccionCondicional		::= IF expresion THEN instrucciones else END PUNTOCOMA;
+else						::= ELSE instrucciones | vacio ;							
+
+//////// Instrucción de iteración FOR  ///////////////////////////////////////////////
+
+instruccionIterativa	::= FOR expresion ASIGNACION expresion TO expresion DO instrucciones END PUNTOCOMA;
+
+///////// LLamadas a funciones y procedimientos ////////////////////////////////////////////////
+
+llamadaFuncion 			::=		IDENTIFICADOR PARENTESISABIERTO envioParametros PARENTESISCERRADO; //PUNTOCOMA;
+
+llamadaProcedimiento	::= 	IDENTIFICADOR PARENTESISABIERTO envioParametros PARENTESISCERRADO PUNTOCOMA
+								| IDENTIFICADOR PARENTESISABIERTO PARENTESISCERRADO PUNTOCOMA
+								| expresion PUNTOCOMA;	
+
+envioParametros			::=		envioParametros COMA expresion | expresion; 
+
+//////////  Instrucciones y sentencias //////////////////////////////////////////////////////////////
+
+instrucciones			::= 	instrucciones instruccion | instruccion;
+instruccion				::=		instruccionWriteln | instruccionWriteString | instruccionWriteInt | instruccionAsignacion | llamadaProcedimiento
+								| instruccionCondicional | instruccionIterativa;
+instruccionWriteln		::=		WRITELN PUNTOCOMA;
+instruccionWriteString	::=		WRITESTRING PARENTESISABIERTO CADENA PARENTESISCERRADO PUNTOCOMA;
+instruccionWriteInt		::=		WRITEINT PARENTESISABIERTO expresion PARENTESISCERRADO PUNTOCOMA;
+instruccionAsignacion	::=		IDENTIFICADOR ASIGNACION expresion PUNTOCOMA | IDENTIFICADOR expresion ASIGNACION expresion PUNTOCOMA;
+
+////////// Expresiones //////////////////////////////////////////////////////////////////////////////
+
+expresion				::=		expresion MINUS expresion | expresion PRODUCTO expresion | PARENTESISABIERTO expresion PARENTESISCERRADO 
+								| NOT expresion | expresion MAYORQUE expresion	| expresion IGUAL expresion | CORCHETEABIERTO expresion CORCHETECERRADO
+								| expresion OR expresion | IDENTIFICADOR expresion | llamadaFuncion;
+expresion				::=		IDENTIFICADOR | TRUE | FALSE | INTEGER | ENTERO_TAL_CUAL;
+	
+
+
+
+
+
+	
