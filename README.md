@@ -3,7 +3,7 @@ Primera parte del desarrollo de un compilador en Java. Aquí se abordan la parte
 
 Los archivos que se han modificado son:
 
-spec/scanner.flex: donde se define el léxico del lenguaje. Aquí se exponen los tokens que se usarán.
+specs/scanner.flex: donde se define el léxico del lenguaje. Aquí se exponen los tokens que se usarán.
 
-spec/parser.cup: se define la sintaxis del lenguaje. 
+specs/parser.cup: se define la sintaxis del lenguaje. 
 
