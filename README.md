@@ -15,5 +15,7 @@ specs/scanner.flex: donde se define el léxico del lenguaje. Aquí se exponen lo
 specs/parser.cup: en este fichero se define y controla la sintaxis del lenguaje.
 
 Para más información, consultar documentación:
+
 1- Instrucciones de implementación.pdf --> se dan las directrices e instrucciones de las herramientas y entidades para la construcción del léxico y sintáctico. 
+
 2- Descripción implementación.pdf --> resumen del trabajo realizado.
