@@ -10,7 +10,6 @@ La arquitectura se monta en Eclipse y se usan las siguientes herramientas:
 
 Los archivos que se han modificado son:
 
-specs/scanner.flex: donde se define el léxico del lenguaje. Aquí se exponen los tokens de los que se compone el lenguaje que vamos a crear. Este es el léxico.
+specs/scanner.flex: donde se define el léxico del lenguaje. Aquí se exponen los tokens de los que se compone el lenguaje que vamos a crear.
 
-specs/parser.cup: en este fichero se define la sintaxis del lenguaje. Aquí controlamos la sintaxis.
-
+specs/parser.cup: en este fichero se define y controla la sintaxis del lenguaje.
