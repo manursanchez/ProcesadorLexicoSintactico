@@ -13,3 +13,7 @@ Los archivos que se han modificado son:
 specs/scanner.flex: donde se define el léxico del lenguaje. Aquí se exponen los tokens de los que se compone el lenguaje que vamos a crear.
 
 specs/parser.cup: en este fichero se define y controla la sintaxis del lenguaje.
+
+Para más información, consultar documentación:
+1- Instrucciones de implementación.pdf --> se dan las directrices e instrucciones de las herramientas y entidades para la construcción del léxico y sintáctico. 
+2- Descripción implementación.pdf --> resumen del trabajo realizado.
